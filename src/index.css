@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+  /* 首帧兜底：token 未定义时回退到深色底，与暗色电影场景一致，不会闪白。 */
+  background-color: hsl(var(--background));
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* shadcn 基础层兜底: 没写显式 text-x / bg-x 的文字和表面 (textarea 输入文字、
+     placeholder、气泡正文) 从这里继承主题色, 不依赖 UA 默认色.
+     烧主题前 token 未定义时这两行按无效值优雅回退, 无副作用. */
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+/* 中英混排对齐:一行里英文(尤其 ds 的 display/像素字体如 Press Start 2P)和中文(系统黑体)
+   混在一起时,英文会偏小、偏上,跟中文对不齐。把纯英文/数字那一截用 <span className="cjk-latin">
+   包起来即可统一对齐:font-size-adjust 拉平字号,vertical-align 把英文下移到与中文同基线。
+   --cjk-latin-shift 由 design_picker 按 ds 烧进 :root(默认 -0.15em);极个别字体偏差大改这一个值。 */
+.cjk-latin {
+  font-size-adjust: 0.56;
+  vertical-align: var(--cjk-latin-shift, -0.15em);
+}
+
+@layer base {
+  /* 导航锚点等页内跳转走平滑滚动：滚动要丝滑，跳变本身就是一次「闪」 */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* 暗色电影调性：深青蓝黑底 + 亮青主色，3D 场景的体积光与辉光从同一片暗场里长出来 */
+  :root {
+    color-scheme: dark;
+    --background: 224 52% 4%;
+    --foreground: 214 32% 91%;
+    --card-foreground: 214 32% 91%;
+    --popover-foreground: 214 32% 91%;
+    --card: 223 44% 7%;
+    --popover: 223 44% 7%;
+    --secondary: 222 34% 12%;
+    --muted: 222 34% 12%;
+    --accent: 222 34% 14%;
+    --secondary-foreground: 214 25% 82%;
+    --accent-foreground: 214 25% 86%;
+    --muted-foreground: 217 16% 58%;
+    --border: 221 30% 17%;
+    --input: 221 30% 22%;
+    --primary: 213 94% 62%;
+    --ring: 213 94% 62%;
+    --primary-foreground: 224 60% 6%;
+    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 72% 56%;
+    --radius: var(--radius-md);
+
+    --space-1: 4px;
+    --space-12: 48px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-pill: 9999px;
+    --radius-sm: 10px;
+    --elev-flat: none;
+    --focus-ring: 0 0 0 4px rgba(96, 165, 250, 0.38);
+    --elev-raised: 0 24px 60px rgba(0, 0, 0, 0.55);
+    --elev-ring: 0 0 0 1px var(--border);
+    --text-2xl: 36px;
+    --text-3xl: 54px;
+    --text-4xl: 76px;
+    --text-base: 16px;
+    --text-lg: 18px;
+    --text-sm: 14px;
+    --text-xl: 24px;
+    --text-xs: 12px;
+    --leading-body: 1.52;
+    --leading-tight: 1.06;
+    --font-display: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --font-body: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --font-mono: "SF Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-monospace, Menlo, monospace;
+    --cjk-latin-shift: -0.15em;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --background: 224 52% 4%;
+    --foreground: 214 32% 91%;
+    --card-foreground: 214 32% 91%;
+    --popover-foreground: 214 32% 91%;
+    --card: 223 44% 7%;
+    --popover: 223 44% 7%;
+    --secondary: 222 34% 12%;
+    --muted: 222 34% 12%;
+    --accent: 222 34% 14%;
+    --secondary-foreground: 214 25% 82%;
+    --accent-foreground: 214 25% 86%;
+    --muted-foreground: 217 16% 58%;
+    --border: 221 30% 17%;
+    --input: 221 30% 22%;
+    --primary: 213 94% 62%;
+    --ring: 213 94% 62%;
+    --primary-foreground: 224 60% 6%;
+    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 72% 56%;
+    --radius: var(--radius-md);
+
+    --space-1: 4px;
+    --space-12: 48px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-pill: 9999px;
+    --radius-sm: 10px;
+    --elev-flat: none;
+    --focus-ring: 0 0 0 4px rgba(96, 165, 250, 0.38);
+    --elev-raised: 0 24px 60px rgba(0, 0, 0, 0.55);
+    --elev-ring: 0 0 0 1px var(--border);
+    --text-2xl: 36px;
+    --text-3xl: 54px;
+    --text-4xl: 76px;
+    --text-base: 16px;
+    --text-lg: 18px;
+    --text-sm: 14px;
+    --text-xl: 24px;
+    --text-xs: 12px;
+    --leading-body: 1.52;
+    --leading-tight: 1.06;
+    --font-display: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --font-body: Inter, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    --font-mono: "SF Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-monospace, Menlo, monospace;
+    --cjk-latin-shift: -0.15em;
+  }
+
+  body { font-family: var(--font-body); }
+
+  /* 中英混排: 把英文/数字那一截用 <span class="cjk-latin"> 包起来, 字号 + 基线对齐中文 (font-size-adjust 0.56 实测最贴中文字高) */
+  .cjk-latin { font-size-adjust: 0.56; vertical-align: var(--cjk-latin-shift, -0.15em); }
+}
+
+/* 暗色电影主题的小件工艺 utility（全部从 :root token 派生，不引入新色相） */
+@layer utilities {
+  /* 极细网格纹理：暗场上隐约透出的示波器坐标格，透明度极低，不抢主体 */
+  .bg-grid-faint {
+    background-image:
+      linear-gradient(to right, hsl(var(--foreground) / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* 极细颗粒肌理：低对比细点阵，叠在后期胶片颗粒之上，避免暗色大平面死板 */
+  .bg-paper-grain {
+    background-image: radial-gradient(hsl(var(--foreground) / 0.055) 0.5px, transparent 0.6px);
+    background-size: 3px 3px;
+  }
+
+  /* 两处大半径冷调光池：暗场里的氛围光晕，与 3D 场景的体积光呼应 */
+  .bg-halo-soft {
+    background-image:
+      radial-gradient(52% 46% at 78% 8%, hsl(var(--primary) / 0.18), transparent 68%),
+      radial-gradient(46% 44% at 8% 76%, hsl(var(--primary) / 0.12), transparent 70%);
+  }
+
+  /* 暗色毛玻璃面板：极细顶部内边缘高光 + 深投影，玻璃浮在暗场之上 */
+  .glass-panel {
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4),
+      0 18px 44px -20px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 hsl(var(--foreground) / 0.07);
+  }
+
+  /* 滚动锁定到当前步骤：primary 细描边 + 一点克制的同色光晕 */
+  .ring-active-soft {
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.55),
+      0 0 32px -8px hsl(var(--primary) / 0.45);
+  }
+
+  /* 主 CTA：primary 光晕按下去有重量感 */
+  .btn-soft {
+    box-shadow:
+      0 1px 2px hsl(var(--primary) / 0.35),
+      0 8px 28px -8px hsl(var(--primary) / 0.55);
+  }
+
+  /* 窄屏导航横滑时不露滚动条 */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 系统开启「减少动效」时：位移类 hover 收敛为仅颜色 / 阴影变化，其余过渡照常保留 */
+@media (prefers-reduced-motion: reduce) {
+  [class*="hover:-translate"]:hover {
+    transform: none !important;
+  }
+  /* 按钮上掠过的光泽条：减少动效时不再横扫 */
+  [class*="group-hover:translate"] {
+    display: none;
+  }
+  /* 减少动效偏好下，锚点跳转也不做平滑滚动 */
+  html {
+    scroll-behavior: auto;
+  }
+}
